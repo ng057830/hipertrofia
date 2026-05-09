@@ -1,213 +1,253 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Progresión Realista (+10%)</title>
-    
-    <!-- Fuentes y Tailwind CSS -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Iconos Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Progresión Gym por Tonelaje</title>
 
-    <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            overscroll-behavior-y: none; 
-            background-color: #f3f4f6;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
-        }
-    </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="min-h-screen flex items-center justify-center p-4 text-gray-800">
 
-    <div class="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden">
-        
-        <!-- Cabecera -->
-        <div class="bg-slate-800 p-6 text-white flex items-center space-x-4">
-            <div class="bg-white/20 p-3 rounded-2xl">
-                <i data-lucide="dumbbell" class="w-8 h-8 text-white"></i>
+<body>
+  <main class="app">
+    <section class="card">
+
+      <header class="header">
+        <div class="header-icon">
+          <i data-lucide="dumbbell"></i>
+        </div>
+
+        <div>
+          <h1>Progresión Gym</h1>
+          <p>Calculadora de tonelaje realista</p>
+        </div>
+      </header>
+
+      <section class="content">
+        <form id="calcForm" class="form">
+
+          <div id="errorBox" class="error hidden">
+            <i data-lucide="alert-circle"></i>
+            <span id="errorText"></span>
+          </div>
+
+          <div class="section-title">Sesión anterior</div>
+
+          <div class="grid-2">
+            <div class="field">
+              <label for="peso">Peso usado</label>
+              <input id="peso" type="number" inputmode="decimal" step="0.5" placeholder="Ej. 130" />
             </div>
+
+            <div class="field">
+              <label for="reps">Reps por serie</label>
+              <input id="reps" type="number" inputmode="numeric" step="1" placeholder="Ej. 10" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="series">Series</label>
+            <input id="series" type="number" inputmode="numeric" step="1" placeholder="Ej. 4" />
+          </div>
+
+          <div class="section-title">Máquina o pesas</div>
+
+          <div class="equipment">
+            <label for="saltoPeso">
+              <i data-lucide="settings-2"></i>
+              <span>Salto real de peso</span>
+            </label>
+
+            <p>
+              Escribe de cuánto en cuánto te deja subir la máquina:
+              2.5 kg, 5 kg, 10 kg, etc.
+            </p>
+
+            <input id="saltoPeso" type="number" inputmode="decimal" step="0.5" value="5" />
+          </div>
+
+          <button class="main-button" type="submit">
+            <i data-lucide="calculator"></i>
+            <span>Calcular progresión</span>
+          </button>
+        </form>
+
+        <section id="results" class="results hidden">
+
+          <div class="summary">
             <div>
-                <h1 class="text-2xl font-bold tracking-tight">Progresión Gym</h1>
-                <p class="text-slate-300 text-sm font-medium">Tonelaje realista +10%</p>
+              <span>Tonelaje base</span>
+              <strong id="baseTonnage">0 kg</strong>
             </div>
-        </div>
 
-        <div class="p-6 sm:p-8">
-            <form id="calcForm" class="space-y-5">
-                
-                <div id="error-message" class="hidden bg-red-50 text-red-600 p-3 rounded-xl flex items-center space-x-2 text-sm font-medium">
-                    <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
-                    <p id="error-text">Error</p>
-                </div>
-
-                <!-- Datos actuales -->
-                <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b pb-2">Sesión Anterior</h2>
-                
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="space-y-1.5">
-                        <label class="text-sm font-semibold text-gray-600 ml-1">Peso levantado</label>
-                        <input type="number" id="peso" inputmode="decimal" step="0.5" 
-                            class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition text-lg" 
-                            placeholder="Ej. 50">
-                    </div>
-                    <div class="space-y-1.5">
-                        <label class="text-sm font-semibold text-gray-600 ml-1">Repeticiones</label>
-                        <input type="number" id="reps" inputmode="numeric" 
-                            class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition text-lg" 
-                            placeholder="Ej. 10">
-                    </div>
-                </div>
-
-                <div class="space-y-1.5">
-                    <label class="text-sm font-semibold text-gray-600 ml-1">Series Totales</label>
-                    <input type="number" id="series" inputmode="numeric" 
-                        class="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-slate-500 focus:border-slate-500 outline-none transition text-lg" 
-                        placeholder="Ej. 4">
-                </div>
-
-                <!-- Configuración del Gimnasio -->
-                <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider border-b pb-2 pt-2">Equipamiento</h2>
-                <div class="space-y-1.5 bg-blue-50 p-4 rounded-xl border border-blue-100">
-                    <label class="text-sm font-semibold text-blue-800 ml-1 flex items-center space-x-2">
-                        <i data-lucide="settings-2" class="w-4 h-4"></i>
-                        <span>Salto de peso en tu máquina/pesas</span>
-                    </label>
-                    <p class="text-xs text-blue-600 mb-2 ml-1">¿De a cuánto sube el peso? (Ej: mancuernas de 2 en 2, o placas de 5 en 5)</p>
-                    <input type="number" id="saltoPeso" inputmode="decimal" step="0.5" value="5"
-                        class="w-full h-12 px-4 bg-white border border-blue-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition text-lg text-blue-900 font-bold" 
-                        placeholder="Ej. 5">
-                </div>
-
-                <button type="submit" 
-                    class="w-full bg-slate-800 hover:bg-slate-900 active:bg-black text-white font-bold h-14 rounded-2xl transition duration-200 flex justify-center items-center space-x-2 shadow-md">
-                    <i data-lucide="calculator" class="w-5 h-5"></i>
-                    <span>Calcular Opciones</span>
-                </button>
-            </form>
-
-            <!-- Resultados -->
-            <div id="resultados" class="hidden mt-8 space-y-5 fade-in">
-                
-                <div class="bg-gray-50 p-4 rounded-2xl border border-gray-200 flex justify-between items-center text-center divide-x divide-gray-300">
-                    <div class="w-1/2 pr-2">
-                        <p class="text-xs text-gray-500 font-bold uppercase tracking-wide">Tonelaje Base</p>
-                        <p class="text-xl font-bold text-gray-800"><span id="res-actual">0</span> <span class="text-sm font-normal text-gray-500">kg</span></p>
-                    </div>
-                    <div class="w-1/2 pl-2">
-                        <p class="text-xs text-blue-600 font-bold uppercase tracking-wide">Meta (+10%)</p>
-                        <p class="text-xl font-bold text-blue-700"><span id="res-objetivo">0</span> <span class="text-sm font-normal text-blue-400">kg</span></p>
-                    </div>
-                </div>
-
-                <h2 class="text-sm font-bold text-gray-400 uppercase tracking-wider pt-2">Elige 1 de estas 3 opciones:</h2>
-
-                <div class="space-y-3">
-                    <!-- Opción 1: Subir Peso Realista -->
-                    <div class="bg-white border-2 border-blue-200 p-4 rounded-2xl flex gap-4 items-center shadow-sm">
-                        <div class="bg-blue-100 p-3 rounded-xl text-blue-700 shrink-0">
-                            <i data-lucide="arrow-up-circle" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 leading-tight">Subir Peso (Máquina/Mancuerna)</h3>
-                            <p id="opc1-text" class="text-sm text-gray-600 mt-1 leading-snug"></p>
-                        </div>
-                    </div>
-
-                    <!-- Opción 2: Subir Repeticiones -->
-                    <div class="bg-white border-2 border-emerald-200 p-4 rounded-2xl flex gap-4 items-center shadow-sm">
-                        <div class="bg-emerald-100 p-3 rounded-xl text-emerald-700 shrink-0">
-                            <i data-lucide="repeat" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 leading-tight">Mismo peso, más Reps</h3>
-                            <p id="opc2-text" class="text-sm text-gray-600 mt-1 leading-snug"></p>
-                        </div>
-                    </div>
-
-                    <!-- Opción 3: Subir Series -->
-                    <div class="bg-white border-2 border-purple-200 p-4 rounded-2xl flex gap-4 items-center shadow-sm">
-                        <div class="bg-purple-100 p-3 rounded-xl text-purple-700 shrink-0">
-                            <i data-lucide="layers" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h3 class="font-bold text-gray-800 leading-tight">Añadir una Serie</h3>
-                            <p id="opc3-text" class="text-sm text-gray-600 mt-1 leading-snug"></p>
-                        </div>
-                    </div>
-                </div>
-
+            <div>
+              <span>Rango ideal</span>
+              <strong id="targetRange">0 - 0 kg</strong>
             </div>
-        </div>
-    </div>
+          </div>
 
-    <script>
-        lucide.createIcons();
+          <article id="bestCard" class="best-card">
+            <div class="best-icon">
+              <i data-lucide="badge-check"></i>
+            </div>
 
-        document.getElementById('calcForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const errorDiv = document.getElementById('error-message');
-            const errorText = document.getElementById('error-text');
-            const resultadosDiv = document.getElementById('resultados');
+            <div>
+              <h2>Mejor opción sugerida</h2>
+              <p id="bestText"></p>
+            </div>
+          </article>
 
-            const p = parseFloat(document.getElementById('peso').value);
-            const r = parseInt(document.getElementById('reps').value);
-            const s = parseInt(document.getElementById('series').value);
-            const salto = parseFloat(document.getElementById('saltoPeso').value);
+          <div class="section-title results-title">Opciones calculadas</div>
 
-            if (isNaN(p) || isNaN(r) || isNaN(s) || isNaN(salto) || p <= 0 || r <= 0 || s <= 0 || salto <= 0) {
-                errorText.innerText = 'Llena todos los campos con números válidos.';
-                errorDiv.classList.remove('hidden');
-                resultadosDiv.classList.add('hidden');
-                return;
-            }
+          <div class="options">
 
-            errorDiv.classList.add('hidden');
+            <article class="option blue">
+              <div class="option-top">
+                <div class="option-icon">
+                  <i data-lucide="arrow-up-circle"></i>
+                </div>
 
-            const tonelajeActual = p * r * s;
-            const incremento = 1.10; 
-            const tonelajeObjetivo = tonelajeActual * incremento;
+                <div>
+                  <h3>1. Subir solo peso</h3>
+                  <p id="weightMain"></p>
+                </div>
+              </div>
 
-            // Opción 1: Subir el peso forzando el salto del gimnasio
-            const nuevoPesoReal = p + salto;
-            // Calculamos cuántas reps se necesitan con ese nuevo peso para llegar al objetivo
-            // Usamos Math.ceil para asegurar que superemos o igualemos el 10%
-            let repsParaNuevoPeso = Math.ceil(tonelajeObjetivo / (nuevoPesoReal * s));
+              <div class="metric-row">
+                <div>
+                  <span>Tonelaje</span>
+                  <strong id="weightTonnage"></strong>
+                </div>
 
-            // Opción 2: Solo subir reps (mismo peso)
-            let nuevasReps = Math.ceil(tonelajeObjetivo / (p * s));
+                <div>
+                  <span>Aumento</span>
+                  <strong id="weightPercent"></strong>
+                </div>
+              </div>
 
-            // Opción 3: Subir 1 serie
-            let nuevasSeries = s + 1;
-            let repsAjustadas = Math.ceil(tonelajeObjetivo / (p * nuevasSeries));
+              <p id="weightNote" class="note"></p>
+            </article>
 
-            // UI Updates
-            document.getElementById('res-actual').innerText = tonelajeActual.toFixed(1);
-            document.getElementById('res-objetivo').innerText = tonelajeObjetivo.toFixed(1);
+            <article class="option green">
+              <div class="option-top">
+                <div class="option-icon">
+                  <i data-lucide="repeat"></i>
+                </div>
 
-            // Textos dinámicos
-            document.getElementById('opc1-text').innerHTML = `Sube a <b class="text-blue-700">${nuevoPesoReal} kg</b>. Mantén ${s} series, pero haz <b class="text-blue-700">${repsParaNuevoPeso} reps</b> por serie.`;
-            
-            document.getElementById('opc2-text').innerHTML = `Mantén los ${p} kg y ${s} series, pero esfuérzate para sacar <b class="text-emerald-700">${nuevasReps} reps</b> por serie.`;
-            
-            document.getElementById('opc3-text').innerHTML = `Mantén los ${p} kg, pero añade 1 serie más. Haz <b class="text-purple-700">${nuevasSeries} series</b> de <b>${repsAjustadas} reps</b>.`;
+                <div>
+                  <h3>2. Subir solo repeticiones</h3>
+                  <p id="repsMain"></p>
+                </div>
+              </div>
 
-            resultadosDiv.classList.remove('hidden');
-            
-            setTimeout(() => {
-                resultadosDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }, 50);
-        });
-    </script>
+              <div class="metric-row">
+                <div>
+                  <span>Tonelaje</span>
+                  <strong id="repsTonnage"></strong>
+                </div>
+
+                <div>
+                  <span>Aumento</span>
+                  <strong id="repsPercent"></strong>
+                </div>
+              </div>
+
+              <p id="repsNote" class="note"></p>
+            </article>
+
+            <article class="option cyan">
+              <div class="option-top">
+                <div class="option-icon">
+                  <i data-lucide="shuffle"></i>
+                </div>
+
+                <div>
+                  <h3>3. Combinada</h3>
+                  <p id="combinedMain"></p>
+                </div>
+              </div>
+
+              <div class="metric-row">
+                <div>
+                  <span>Tonelaje</span>
+                  <strong id="combinedTonnage"></strong>
+                </div>
+
+                <div>
+                  <span>Aumento</span>
+                  <strong id="combinedPercent"></strong>
+                </div>
+              </div>
+
+              <p id="combinedNote" class="note"></p>
+            </article>
+
+            <article class="option purple">
+              <div class="option-top">
+                <div class="option-icon">
+                  <i data-lucide="layers"></i>
+                </div>
+
+                <div>
+                  <h3>4. Añadir una serie</h3>
+                  <p id="seriesMain"></p>
+                </div>
+              </div>
+
+              <div class="metric-row">
+                <div>
+                  <span>Tonelaje</span>
+                  <strong id="seriesTonnage"></strong>
+                </div>
+
+                <div>
+                  <span>Aumento</span>
+                  <strong id="seriesPercent"></strong>
+                </div>
+              </div>
+
+              <p id="seriesNote" class="note"></p>
+            </article>
+
+            <article id="techniqueCard" class="option orange">
+              <div class="option-top">
+                <div class="option-icon">
+                  <i data-lucide="arrow-down-circle"></i>
+                </div>
+
+                <div>
+                  <h3>5. Bajar peso para técnica</h3>
+                  <p id="techniqueMain"></p>
+                </div>
+              </div>
+
+              <div class="metric-row">
+                <div>
+                  <span>Tonelaje</span>
+                  <strong id="techniqueTonnage"></strong>
+                </div>
+
+                <div>
+                  <span>Aumento</span>
+                  <strong id="techniquePercent"></strong>
+                </div>
+              </div>
+
+              <p id="techniqueNote" class="note"></p>
+            </article>
+
+          </div>
+        </section>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
