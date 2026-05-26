@@ -25,7 +25,7 @@
 
         <div>
           <h1>Progresión Gym</h1>
-          <p>Calculadora de tonelaje realista</p>
+          <p>Progresión segura entre +5% y +10%</p>
         </div>
       </header>
 
@@ -41,19 +41,31 @@
 
           <div class="grid-2">
             <div class="field">
-              <label for="peso">Peso usado</label>
-              <input id="peso" type="number" inputmode="decimal" step="0.5" placeholder="Ej. 130" />
+              <label for="reps">Reps por serie</label>
+              <div class="stepper-group">
+                <button type="button" class="stepper-btn minus" data-target="reps" aria-label="Disminuir repeticiones">−</button>
+                <input id="reps" type="number" inputmode="numeric" step="1" min="1" placeholder="10" />
+                <button type="button" class="stepper-btn plus" data-target="reps" aria-label="Aumentar repeticiones">+</button>
+              </div>
             </div>
 
             <div class="field">
-              <label for="reps">Reps por serie</label>
-              <input id="reps" type="number" inputmode="numeric" step="1" placeholder="Ej. 10" />
+              <label for="peso">Carga usada (kg)</label>
+              <div class="stepper-group">
+                <button type="button" class="stepper-btn minus" data-target="peso" aria-label="Disminuir peso">−</button>
+                <input id="peso" type="number" inputmode="decimal" step="2.5" min="0" placeholder="130" />
+                <button type="button" class="stepper-btn plus" data-target="peso" aria-label="Aumentar peso">+</button>
+              </div>
             </div>
           </div>
 
           <div class="field">
             <label for="series">Series</label>
-            <input id="series" type="number" inputmode="numeric" step="1" placeholder="Ej. 4" />
+            <div class="stepper-group">
+              <button type="button" class="stepper-btn minus" data-target="series" aria-label="Disminuir series">−</button>
+              <input id="series" type="number" inputmode="numeric" step="1" min="1" placeholder="4" />
+              <button type="button" class="stepper-btn plus" data-target="series" aria-label="Aumentar series">+</button>
+            </div>
           </div>
 
           <div class="section-title">Máquina o pesas</div>
@@ -69,7 +81,11 @@
               2.5 kg, 5 kg, 10 kg, etc.
             </p>
 
-            <input id="saltoPeso" type="number" inputmode="decimal" step="0.5" value="5" />
+            <div class="stepper-group inline-stepper">
+              <button type="button" class="stepper-btn minus" data-target="saltoPeso" aria-label="Disminuir salto">−</button>
+              <input id="saltoPeso" type="number" inputmode="decimal" step="2.5" min="0.5" value="5" />
+              <button type="button" class="stepper-btn plus" data-target="saltoPeso" aria-label="Aumentar salto">+</button>
+            </div>
           </div>
 
           <button class="main-button" type="submit">
@@ -87,7 +103,7 @@
             </div>
 
             <div>
-              <span>Rango ideal</span>
+              <span>Rango objetivo recomendado (+5% a +10%)</span>
               <strong id="targetRange">0 - 0 kg</strong>
             </div>
           </div>
@@ -98,7 +114,7 @@
             </div>
 
             <div>
-              <h2>Mejor opción sugerida</h2>
+              <h2>Mejor opción segura</h2>
               <p id="bestText"></p>
             </div>
           </article>
@@ -107,14 +123,17 @@
 
           <div class="options">
 
-            <article class="option blue">
+            <article id="weightCard" class="option blue">
               <div class="option-top">
                 <div class="option-icon">
                   <i data-lucide="arrow-up-circle"></i>
                 </div>
 
-                <div>
-                  <h3>1. Subir solo peso</h3>
+                <div class="option-details">
+                  <div class="option-header-row">
+                    <h3>1. Subir solo peso</h3>
+                    <span id="weightBadge" class="option-badge"></span>
+                  </div>
                   <p id="weightMain"></p>
                 </div>
               </div>
@@ -134,14 +153,17 @@
               <p id="weightNote" class="note"></p>
             </article>
 
-            <article class="option green">
+            <article id="repsCard" class="option green">
               <div class="option-top">
                 <div class="option-icon">
                   <i data-lucide="repeat"></i>
                 </div>
 
-                <div>
-                  <h3>2. Subir solo repeticiones</h3>
+                <div class="option-details">
+                  <div class="option-header-row">
+                    <h3>2. Subir solo repeticiones</h3>
+                    <span id="repsBadge" class="option-badge"></span>
+                  </div>
                   <p id="repsMain"></p>
                 </div>
               </div>
@@ -161,14 +183,17 @@
               <p id="repsNote" class="note"></p>
             </article>
 
-            <article class="option cyan">
+            <article id="combinedCard" class="option cyan">
               <div class="option-top">
                 <div class="option-icon">
                   <i data-lucide="shuffle"></i>
                 </div>
 
-                <div>
-                  <h3>3. Combinada</h3>
+                <div class="option-details">
+                  <div class="option-header-row">
+                    <h3>3. Combinada: peso + reps</h3>
+                    <span id="combinedBadge" class="option-badge"></span>
+                  </div>
                   <p id="combinedMain"></p>
                 </div>
               </div>
@@ -188,14 +213,17 @@
               <p id="combinedNote" class="note"></p>
             </article>
 
-            <article class="option purple">
+            <article id="seriesCard" class="option purple">
               <div class="option-top">
                 <div class="option-icon">
                   <i data-lucide="layers"></i>
                 </div>
 
-                <div>
-                  <h3>4. Añadir una serie</h3>
+                <div class="option-details">
+                  <div class="option-header-row">
+                    <h3>4. Añadir una serie</h3>
+                    <span id="seriesBadge" class="option-badge"></span>
+                  </div>
                   <p id="seriesMain"></p>
                 </div>
               </div>
@@ -215,34 +243,43 @@
               <p id="seriesNote" class="note"></p>
             </article>
 
-            <article id="techniqueCard" class="option orange">
-              <div class="option-top">
-                <div class="option-icon">
-                  <i data-lucide="arrow-down-circle"></i>
-                </div>
-
-                <div>
-                  <h3>5. Bajar peso para técnica</h3>
-                  <p id="techniqueMain"></p>
-                </div>
-              </div>
-
-              <div class="metric-row">
-                <div>
-                  <span>Tonelaje</span>
-                  <strong id="techniqueTonnage"></strong>
-                </div>
-
-                <div>
-                  <span>Aumento</span>
-                  <strong id="techniquePercent"></strong>
-                </div>
-              </div>
-
-              <p id="techniqueNote" class="note"></p>
-            </article>
-
           </div>
+
+          <div id="techniqueSection">
+            <div class="section-title results-title separation-title">Modo Técnica / Control</div>
+            <div class="technique-container">
+              <article id="techniqueCard" class="option orange">
+                <div class="option-top">
+                  <div class="option-icon">
+                    <i data-lucide="arrow-down-circle"></i>
+                  </div>
+
+                  <div class="option-details">
+                    <div class="option-header-row">
+                      <h3>5. Modo técnica / control</h3>
+                      <span id="techniqueBadge" class="option-badge badge-tecnica">Técnica</span>
+                    </div>
+                    <p id="techniqueMain"></p>
+                  </div>
+                </div>
+
+                <div class="metric-row">
+                  <div>
+                    <span>Tonelaje</span>
+                    <strong id="techniqueTonnage"></strong>
+                  </div>
+
+                  <div>
+                    <span>Aumento</span>
+                    <strong id="techniquePercent"></strong>
+                  </div>
+                </div>
+
+                <p id="techniqueNote" class="note"></p>
+              </article>
+            </div>
+          </div>
+
         </section>
       </section>
     </section>
